@@ -1,0 +1,53 @@
+# BreachDetact - Email Breach Detection Site
+
+This application allows users to check if their email address has been involved in any known data breaches. 
+It is built using React and the official XposedOrNot API.
+
+## How the API is Used
+
+The application utilizes the `xposedornot` npm package, which is a wrapper around the official 
+XposedOrNot API (https://xposedornot.com).
+
+1.  **Client Initialization** (at the top of [App.jsx](file:///z:/sxca/ReactPractical/breachdetaction/src/App.jsx)):
+    ```javascript
+    const xon = new XposedOrNot({ 
+      baseUrl: 'https://api.xposedornot.com',
+      timeout: 60000 
+    });
+    ```
+    The `baseUrl` points to the primary XposedOrNot API endpoint, and we've set a 60-second timeout.
+
+2.  **Breach Analytics Request** (inside the `handleSearch` function in [App.jsx](file:///z:/sxca/ReactPractical/breachdetaction/src/App.jsx)):
+    When a user enters an email and clicks "Check Now", the app calls:
+    ```javascript
+    const response = await xon.getBreachAnalytics(email);
+    ```
+    This endpoint provides comprehensive data including:
+    -   `found`: Boolean indicating if the email was breached.
+    -   `ExposedBreaches`: A list of all breaches with detailed info for each.
+    -   `BreachMetrics`: Numerical statistics about the exposure.
+
+## The Process
+
+1.  **User Input**: User enters their email in the glassmorphism search bar.
+2.  **State Management**: React handles the input state and triggers the `handleSearch` function on form submission.
+3.  **Loading State**: A loading spinner is shown while the API request is in progress.
+4.  **Data Fetching**: The `xposedornot` library sends a secure HTTPS request to the API.
+5.  **Result Rendering**:
+    -   If **No Breaches** are found: A success message with a green "Safe" indicator is shown.
+    -   If **Breaches Are Found**: A security warning is displayed along with a list of cards showing exactly where and when the data was exposed.
+6.  **Error Handling**: If the request fails (e.g., timeout or rate limit), a user-friendly error message is displayed in the UI.
+
+## Technology Stack
+-   **Frontend**: React (Vite)
+-   **Animations**: Framer Motion
+-   **Icons**: Lucide React
+-   **API Wrapper**: xposedornot (NPM)
+-   **Styling**: Premium Vanilla CSS with Glassmorphism and Dark Mode.
+
+## How to Run
+1.  Open the terminal in the project directory (`z:\sxca\ReactPractical\breachdetaction`).
+2.  Run `npm start` or `npm run dev`.
+3.  Navigate to the URL provided (default: http://localhost:5173).
+
+Stay Safe!
